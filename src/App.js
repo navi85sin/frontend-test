@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./App.css";
 
 import Autocomplete from "./Autocomplete";
 import ProductDetail from "./ProductDetail";
 
-function App() {
+const App = ()  => {
+ 
+  const [productId, productIdSet] = useState('');
+  // Set the product ID from child component
+  const getProductID = (val) => {
+    productIdSet(val);
+  };
+ 
   return (
     <div className="App">
-      <Autocomplete />
-      <ProductDetail productId={null} />
+      <Autocomplete getProductID = {getProductID} />
+      <ProductDetail productId={productId} />
     </div>
   );
 }

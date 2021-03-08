@@ -7,3 +7,12 @@
   width: 95%;
   max-width: 70rem;
 }
+
+/**  Mobile **/
+@media (max-width: 600px) {
+  .App  {
+    display:flex;
+    flex-direction: column-reverse;
+  
+  }
+}

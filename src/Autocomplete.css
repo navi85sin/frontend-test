@@ -13,3 +13,25 @@
 .search-box:focus {
   outline: 1px solid #16a2ff;
 }
+
+.suggestionsList {
+  list-style-type: none;
+  padding: 0px;
+  margin:0px;
+}
+
+.suggestionsList li{
+  padding: 1rem 1rem 1rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #e4e4e4;
+  border-top:1px;
+  cursor: pointer;
+}
+
+/**  Mobile **/
+@media (max-width: 600px) {
+  .search-container {
+    align-items: baseline;
+    width: 100%;
+  }
+}

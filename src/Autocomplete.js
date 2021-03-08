@@ -2,17 +2,32 @@ import React, { useEffect, useState } from "react";
 
 import { fetchSuggestions } from "./utils/api";
 
-import "./Autocomplete.css";
+import { useDebounce } from 'use-debounce';
 
-function Autocomplete() {
+import "./Autocomplete.css";
+// Set number of items in autocomplete list
+const suggestionArraySize = 10;
+
+const Autocomplete = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-
+  const [searchTermValue] = useDebounce(searchTerm, 500);
+ 
   useEffect(() => {
-    fetchSuggestions(searchTerm).then((_suggestions) =>
-      setSuggestions(_suggestions)
-    );
-  }, [searchTerm]);
+    if (searchTermValue) {
+      fetchSuggestions(searchTermValue).then((_suggestions) =>
+        setSuggestions(_suggestions)
+      );
+    }
+  }, [searchTermValue]);
+
+ // Onclick function for search items
+  const productSelect = (e, id) => {
+     setSearchTerm('');
+     setSuggestions('');
+     // Set value to parent component
+     props.getProductID(id);
+  };
 
   return (
     <div className="search-container">
@@ -23,7 +38,17 @@ function Autocomplete() {
         placeholder="Search for a product"
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      {/* TODO: render search suggestions */}
+      {!!(suggestions)?
+      <ul className="suggestionsList">
+        {suggestions.slice(0, suggestionArraySize).map((item) => (
+          <li 
+            key ={item.id} 
+            onClick={e => productSelect(e, item.id)}>
+            {item.title}
+          </li>
+        ))}
+      </ul> 
+      : "" }
     </div>
   );
 }

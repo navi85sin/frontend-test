@@ -20,3 +20,12 @@
 .product-image {
   max-width: 100%;
 }
+
+/**  Mobile **/
+@media (max-width: 600px) {
+  .detail-container {
+    width: 100%;
+    display: block;
+    margin: 10px 0px;
+  }
+}
