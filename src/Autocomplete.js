@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { fetchSuggestions } from "./utils/api";
 
-import { useDebounce } from 'use-debounce';
+import { useDebounce } from "use-debounce";
 
 import "./Autocomplete.css";
 // Set number of items in autocomplete list
@@ -12,21 +12,24 @@ const Autocomplete = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [searchTermValue] = useDebounce(searchTerm, 500);
- 
+
   useEffect(() => {
-    if (searchTermValue) {
-      fetchSuggestions(searchTermValue).then((_suggestions) =>
+    const fetchApiCall = async () => {
+      await fetchSuggestions(searchTermValue).then((_suggestions) =>
         setSuggestions(_suggestions)
       );
+    };
+    if (searchTermValue) {
+      fetchApiCall();
     }
   }, [searchTermValue]);
 
- // Onclick function for search items
+  // Onclick function for search items
   const productSelect = (e, id) => {
-     setSearchTerm('');
-     setSuggestions('');
-     // Set value to parent component
-     props.getProductID(id);
+    setSearchTerm("");
+    setSuggestions("");
+    // Set value to parent component
+    props.getProductID(id);
   };
 
   return (
@@ -38,19 +41,19 @@ const Autocomplete = (props) => {
         placeholder="Search for a product"
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      {!!(suggestions)?
-      <ul className="suggestionsList">
-        {suggestions.slice(0, suggestionArraySize).map((item) => (
-          <li 
-            key ={item.id} 
-            onClick={e => productSelect(e, item.id)}>
-            {item.title}
-          </li>
-        ))}
-      </ul> 
-      : "" }
+      {!!suggestions ? (
+        <ul className="suggestionsList">
+          {suggestions.slice(0, suggestionArraySize).map((item) => (
+            <li key={item.id} onClick={(e) => productSelect(e, item.id)}>
+              {item.title}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        ""
+      )}
     </div>
   );
-}
+};
 
 export default Autocomplete;
